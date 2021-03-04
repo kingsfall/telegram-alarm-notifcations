@@ -1,0 +1,35 @@
+[{ "id": "95205ce4.be853", "type": "tab", "label": "Send CSV", "disabled": false, "info": "" }, { "id": "3255337b.93174c", "type": "change", "z": "95205ce4.be853", "name": "remove csv", "rules": [{ "t": "set", "p": "payload", "pt": "msg", "to": "cd /root/csv && rm timestamp-update.csv", "tot": "str" }], "action": "", "property": "", "from": "", "to": "", "reg": false, "x": 410, "y": 120, "wires": [
+        ["27699d1b.a90d62"]
+    ] }, { "id": "27699d1b.a90d62", "type": "exec", "z": "95205ce4.be853", "command": "", "addpay": true, "append": "", "useSpawn": "false", "timer": "", "oldrc": false, "name": "", "x": 590, "y": 120, "wires": [
+        [],
+        [],
+        []
+    ] }, { "id": "3b82bce8.164db4", "type": "inject", "z": "95205ce4.be853", "name": "", "props": [], "repeat": "", "crontab": "", "once": false, "onceDelay": 0.1, "topic": "", "payloadType": "str", "x": 210, "y": 120, "wires": [
+        ["3255337b.93174c"]
+    ] }, { "id": "4c25bf07.c9a26", "type": "link in", "z": "95205ce4.be853", "name": "", "links": ["596efcf8.da1cd4"], "x": 165, "y": 340, "wires": [
+        ["ae701236.844f5"]
+    ] }, { "id": "ae701236.844f5", "type": "function", "z": "95205ce4.be853", "name": "", "func": "var date = new Date().getTime();\ndate = Date(date).toString()\nmsg.payload.timestamp = date;\nreturn msg;", "outputs": 1, "noerr": 0, "initialize": "", "finalize": "", "x": 330, "y": 340, "wires": [
+        ["1a9ba044.8cfad"]
+    ] }, { "id": "aeba951e.af95d8", "type": "debug", "z": "95205ce4.be853", "name": "", "active": true, "tosidebar": true, "console": false, "tostatus": false, "complete": "true", "targetType": "full", "statusVal": "", "statusType": "auto", "x": 670, "y": 400, "wires": [] }, { "id": "1a9ba044.8cfad", "type": "csv", "z": "95205ce4.be853", "name": "", "sep": ",", "hdrin": "", "hdrout": "once", "multi": "one", "ret": "\\n", "temp": "", "skip": "0", "strings": true, "include_empty_strings": "", "include_null_values": "", "x": 490, "y": 340, "wires": [
+        ["8fd62f7b.84595"]
+    ] }, { "id": "8fd62f7b.84595", "type": "file", "z": "95205ce4.be853", "name": "", "filename": "/root/csv/timestamp-update.csv", "appendNewline": false, "createDir": true, "overwriteFile": "false", "encoding": "none", "x": 710, "y": 340, "wires": [
+        ["aeba951e.af95d8"]
+    ] }, { "id": "2ec425d0.21ab5a", "type": "change", "z": "95205ce4.be853", "name": "create empty csv", "rules": [{ "t": "set", "p": "payload", "pt": "msg", "to": "cd /root/csv && touch timestamp-update.csv", "tot": "str" }], "action": "", "property": "", "from": "", "to": "", "reg": false, "x": 430, "y": 160, "wires": [
+        ["27699d1b.a90d62"]
+    ] }, { "id": "470d8562.00eacc", "type": "inject", "z": "95205ce4.be853", "name": "", "props": [], "repeat": "", "crontab": "", "once": false, "onceDelay": 0.1, "topic": "", "payloadType": "str", "x": 210, "y": 160, "wires": [
+        ["2ec425d0.21ab5a"]
+    ] }, { "id": "4a54a743.f373a8", "type": "telegram command", "z": "95205ce4.be853", "name": "", "command": "/sendupdate", "bot": "ccb22bd6.5ba138", "strict": false, "hasresponse": true, "useregex": false, "removeregexcommand": false, "outputs": 2, "x": 250, "y": 500, "wires": [
+        ["6692858c.86197c"],
+        []
+    ] }, { "id": "6692858c.86197c", "type": "function", "z": "95205ce4.be853", "name": "", "func": "var mychatid = msg.payload.chatId;\n\nvar payload = { \n    chatId: mychatid,\n    type: \"document\",\n    content: \"/root/csv/timestamp-update.csv\" };\n    \nreturn {payload};", "outputs": 1, "noerr": 0, "initialize": "", "finalize": "", "x": 440, "y": 500, "wires": [
+        ["77357ab8.6f6684"]
+    ] }, { "id": "77357ab8.6f6684", "type": "telegram sender", "z": "95205ce4.be853", "name": "", "bot": "ccb22bd6.5ba138", "haserroroutput": false, "outputs": 1, "x": 650, "y": 500, "wires": [
+        []
+    ] }, { "id": "942e2cde.ca4d4", "type": "change", "z": "95205ce4.be853", "name": "", "rules": [{ "t": "set", "p": "reset", "pt": "msg", "to": "", "tot": "str" }], "action": "", "property": "", "from": "", "to": "", "reg": false, "x": 320, "y": 400, "wires": [
+        ["1a9ba044.8cfad"]
+    ] }, { "id": "9dbed00d.8ce9a", "type": "inject", "z": "95205ce4.be853", "name": "", "props": [], "repeat": "", "crontab": "", "once": false, "onceDelay": 0.1, "topic": "", "payloadType": "str", "x": 170, "y": 400, "wires": [
+        ["942e2cde.ca4d4"]
+    ] }, { "id": "6f59a983.9dab38", "type": "telegram receiver", "z": "95205ce4.be853", "name": "", "bot": "ccb22bd6.5ba138", "saveDataDir": "", "filterCommands": false, "x": 250, "y": 580, "wires": [
+        [],
+        []
+    ] }, { "id": "ccb22bd6.5ba138", "type": "telegram bot", "botname": "SEMY_Industry_bot", "usernames": "", "chatids": "", "baseapiurl": "", "updatemode": "polling", "pollinterval": "300", "usesocks": false, "sockshost": "", "socksport": "6667", "socksusername": "anonymous", "sockspassword": "", "bothost": "", "botpath": "", "localbotport": "8443", "publicbotport": "8443", "privatekey": "", "certificate": "", "useselfsignedcertificate": false, "sslterminated": false, "verboselogging": false }]
